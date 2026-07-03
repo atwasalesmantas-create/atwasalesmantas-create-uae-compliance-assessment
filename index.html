@@ -8,124 +8,807 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        /* All CSS here - compact version */
-        :root { --ink-deep:#0A0A0B; --ink:#17181A; --ink-soft:#A9ACAE; --canvas:#F4F2ED; --panel:#FFFFFF; --panel-soft:#EDEAE2; --line:#2A2B2D; --line-light:#DCD8CC; --text-light:#26251F; --text-light-soft:#5C5A52; --gold:#B8923D; --gold-bright:#D4AC5C; --green:#5C8A6B; --amber:#CFA23D; --orange:#BE6A3D; --red:#A6373A; --radius:2px; --display:'Poppins',sans-serif; --sans:'IBM Plex Sans',sans-serif; --mono:'IBM Plex Mono',monospace; }
-        *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:var(--sans);background:var(--canvas);color:var(--text-light);line-height:1.55}
-        .screen{display:none}.screen.active{display:block}
-        .hex-bg{position:relative;background:var(--ink-deep);overflow:hidden}
-        .hex-bg::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='104' viewBox='0 0 120 104'%3E%3Cpolygon points='30,0 90,0 120,52 90,104 30,104 0,52' fill='none' stroke='%23FFFFFF' stroke-opacity='0.045' stroke-width='1'/%3E%3C/svg%3E");background-size:120px 104px;pointer-events:none}
-        .hex-bg>*{position:relative;z-index:1}
-        .atwa-mark{display:inline-flex;align-items:center;gap:12px}
-        .atwa-mark svg{display:block}
-        .atwa-wordblock{display:flex;flex-direction:column;line-height:1}
-        .atwa-wordblock .name{font-family:var(--display);font-weight:800;letter-spacing:.02em;color:#fff;font-size:15px}
-        .atwa-wordblock .sub{font-family:var(--mono);font-size:8.5px;letter-spacing:.22em;color:var(--ink-soft);text-transform:uppercase;margin-top:3px}
-        .brandbar{display:flex;align-items:center;justify-content:space-between;padding:20px 40px}
-        .brandbar .tagline{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--ink-soft);text-transform:uppercase}
-        .hero{max-width:960px;margin:0 auto;padding:80px 40px 70px}
-        .hero-eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:26px;display:flex;align-items:center;gap:10px}
-        .hero-eyebrow::before{content:'';width:26px;height:1px;background:var(--gold-bright)}
-        .hero h1{font-family:var(--display);font-weight:700;font-size:clamp(32px,4.8vw,54px);line-height:1.12;letter-spacing:-.01em;margin:0 0 24px;max-width:17ch;color:#fff}
-        .hero h1 span{color:var(--gold-bright)}
-        .hero p.lede{font-size:17px;color:var(--ink-soft);max-width:54ch;margin:0 0 40px}
-        .hero-stats{display:flex;flex-wrap:wrap;gap:0;border-top:1px solid var(--line);margin-top:6px}
-        .hero-stat{flex:1;min-width:130px;padding:20px 24px 0 0;border-right:1px solid var(--line)}
-        .hero-stat:last-child{border-right:none}
-        .hero-stat .num{font-family:var(--display);font-weight:700;font-size:26px;color:var(--gold-bright);display:block}
-        .hero-stat .label{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
-        .btn{font-family:var(--sans);font-weight:600;font-size:15px;padding:15px 30px;border-radius:var(--radius);border:1px solid var(--gold);background:var(--gold);color:#0A0A0B;cursor:pointer;display:inline-flex;align-items:center;gap:10px;transition:transform .15s ease,background .15s ease}
-        .btn:hover{background:var(--gold-bright);transform:translateY(-1px)}
-        .btn:focus-visible{outline:2px solid var(--gold-bright);outline-offset:3px}
-        .btn-ghost{background:transparent;color:#fff;border-color:#454648}
-        .btn-ghost:hover{background:#1E1F21}
-        .btn-ghost.light{color:var(--text-light);border-color:var(--line-light)}
-        .btn-ghost.light:hover{background:var(--panel-soft)}
-        .btn[disabled]{opacity:.3;cursor:not-allowed;transform:none}
-        .hero-cta{margin:44px 0 44px}
-        .trust-strip{max-width:960px;margin:0 auto;padding:0 40px 90px}
-        .trust-strip .strip-label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:18px}
-        .chip-row{display:flex;flex-wrap:wrap;gap:10px}
-        .chip{font-family:var(--sans);font-size:12.5px;padding:8px 14px;border:1px solid var(--line);border-radius:20px;color:var(--ink-soft)}
-        .wizard-wrap{max-width:760px;margin:0 auto;padding:50px 40px 100px}
-        .progress-row{display:flex;align-items:center;gap:16px;margin-bottom:44px}
-        .progress-track{flex:1;height:3px;background:var(--line-light);position:relative;overflow:hidden}
-        .progress-fill{position:absolute;left:0;top:0;bottom:0;background:var(--gold);width:0%;transition:width .4s ease}
-        .progress-count{font-family:var(--mono);font-size:12px;color:var(--text-light-soft);white-space:nowrap}
-        .step-eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
-        .step-title{font-family:var(--display);font-size:29px;font-weight:700;margin:0 0 34px;color:var(--text-light)}
-        .help-text{font-size:14px;color:var(--text-light-soft);margin:-20px 0 20px 0;font-style:italic}
-        .field-group{margin-bottom:30px}
-        .field-group label.q-label{display:block;font-size:15px;font-weight:600;margin-bottom:12px;color:var(--text-light)}
-        .option-grid{display:flex;flex-wrap:wrap;gap:10px}
-        .option-btn{font-family:var(--sans);font-size:14px;padding:11px 18px;border:1px solid var(--line-light);background:var(--panel);color:var(--text-light);border-radius:var(--radius);cursor:pointer;transition:all .12s ease}
-        .option-btn:hover{border-color:var(--gold)}
-        .option-btn.selected{background:var(--ink-deep);border-color:var(--ink-deep);color:#fff}
-        .option-btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-        input.q-input{font-family:var(--sans);font-size:15px;padding:12px 14px;border:1px solid var(--line-light);background:var(--panel);color:var(--text-light);border-radius:var(--radius);width:100%;max-width:340px}
-        input.q-input:focus{outline:2px solid var(--gold);outline-offset:1px}
-        .wizard-nav{display:flex;justify-content:space-between;align-items:center;margin-top:48px;padding-top:24px;border-top:1px solid var(--line-light)}
-        .results-wrap{max-width:940px;margin:0 auto;padding:50px 40px 60px}
-        .results-head{display:flex;gap:56px;align-items:center;flex-wrap:wrap;padding-bottom:44px;border-bottom:1px solid var(--line-light);margin-bottom:44px}
-        .gauge-wrap{position:relative;width:220px;height:220px;flex-shrink:0}
-        .gauge-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-        .gauge-score{font-family:var(--display);font-size:50px;font-weight:800;line-height:1}
-        .gauge-tier{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;margin-top:8px;text-align:center;max-width:140px}
-        .results-headtext{flex:1;min-width:260px}
-        .results-headtext h2{font-family:var(--display);font-size:28px;font-weight:700;margin:0 0 12px;color:var(--text-light)}
-        .results-headtext p{color:var(--text-light-soft);font-size:15px;max-width:44ch;margin:0}
-        .value-strip{display:flex;gap:30px;margin-top:22px;flex-wrap:wrap}
-        .value-metric .num{font-family:var(--display);font-weight:700;font-size:21px;display:block;color:var(--text-light)}
-        .value-metric .label{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-light-soft)}
-        .cat-breakdown{margin-bottom:50px}
-        .section-label{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-light-soft);margin-bottom:20px;display:flex;align-items:center;gap:10px}
-        .section-label::after{content:'';flex:1;height:1px;background:var(--line-light)}
-        .cat-row{display:grid;grid-template-columns:170px 1fr 50px;align-items:center;gap:16px;padding:12px 0;border-bottom:1px solid var(--line-light);font-size:14px}
-        .cat-row:first-of-type{border-top:1px solid var(--line-light)}
-        .cat-name{font-weight:600;color:var(--text-light)}
-        .cat-bar-track{height:8px;background:var(--panel-soft);border-radius:4px;overflow:hidden}
-        .cat-bar-fill{height:100%;border-radius:4px;width:0%;transition:width .6s ease}
-        .cat-score{font-family:var(--mono);text-align:right;font-size:13px;color:var(--text-light)}
-        .two-col{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-bottom:50px}
-        @media(max-width:680px){.two-col{grid-template-columns:1fr}}
-        .list-card{border:1px solid var(--line-light);background:var(--panel);padding:26px 26px 10px}
-        .list-card h3{font-family:var(--display);font-size:18px;margin:0 0 16px;font-weight:700;color:var(--text-light)}
-        .list-card ul{list-style:none;margin:0;padding:0}
-        .list-card li{display:flex;gap:10px;align-items:flex-start;font-size:14px;padding:0 0 16px;color:var(--text-light-soft)}
-        .mark{flex-shrink:0;font-family:var(--mono);font-size:13px;margin-top:1px}
-        .mark.good{color:var(--green)}
-        .mark.risk{color:var(--red)}
-        .actions-block{margin-bottom:54px}
-        .action-item{display:grid;grid-template-columns:80px 1fr;gap:20px;padding:22px 0;border-bottom:1px solid var(--line-light)}
-        .action-item:first-of-type{border-top:1px solid var(--line-light)}
-        .action-priority{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold)}
-        .action-item h4{font-family:var(--display);font-size:17px;margin:0 0 6px;font-weight:700;color:var(--text-light)}
-        .action-item p{margin:0 0 8px;font-size:14px;color:var(--text-light-soft)}
-        .action-service{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:var(--gold);background:#F4E9D2;padding:4px 9px;border-radius:20px}
-        .capture-card{color:#F2F0EA;padding:46px 44px;border-radius:var(--radius);margin-bottom:40px}
-        .capture-card h3{font-family:var(--display);font-size:25px;margin:0 0 10px;font-weight:700;color:#fff}
-        .capture-card p{color:var(--ink-soft);font-size:14.5px;margin:0 0 28px;max-width:52ch}
-        .capture-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px}
-        @media(max-width:600px){.capture-grid{grid-template-columns:1fr}}
-        .capture-grid input{font-family:var(--sans);font-size:14px;padding:13px 14px;border:1px solid var(--line);background:#1B1C1E;color:#F2F0EA;border-radius:var(--radius)}
-        .capture-grid input::placeholder{color:#7A7C7F}
-        .capture-grid input:focus{outline:2px solid var(--gold)}
-        .privacy-notice{background:rgba(255,255,255,0.05);border-left:3px solid var(--gold);padding:16px 20px;margin-bottom:22px;border-radius:4px;font-size:13px;color:var(--ink-soft);line-height:1.6}
-        .privacy-notice strong{color:#fff}
-        .privacy-notice a{color:var(--gold-bright);text-decoration:underline}
-        .capture-checkbox{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;color:var(--ink-soft);margin-bottom:26px}
-        .capture-checkbox input[type=checkbox]{margin-top:3px;width:18px;height:18px;flex-shrink:0;accent-color:var(--gold);cursor:pointer}
-        .post-capture{display:none;gap:14px;flex-wrap:wrap}
-        .post-capture.active{display:flex}
-        .contact-strip{display:flex;flex-wrap:wrap;gap:36px;padding:36px 0 0;border-top:1px solid var(--line);margin-top:36px;font-family:var(--mono);font-size:12px;color:var(--ink-soft)}
-        .contact-strip strong{display:block;color:#fff;font-family:var(--sans);font-weight:600;font-size:12.5px;margin-bottom:4px}
-        footer.disclaimer{max-width:940px;margin:0 auto;padding:0 40px 60px;font-size:12px;color:var(--text-light-soft);border-top:1px solid var(--line-light);padding-top:24px}
-        .restart-link{font-family:var(--mono);font-size:12px;letter-spacing:.05em;color:var(--text-light-soft);text-decoration:underline;cursor:pointer;background:none;border:none;padding:0}
-        @media(max-width:640px){.brandbar{padding:16px 22px}.hero{padding:56px 22px 50px}.trust-strip{padding:0 22px 70px}.wizard-wrap{padding:36px 22px 70px}.results-wrap{padding:36px 22px 40px}.capture-card{padding:32px 24px}.cat-row{grid-template-columns:120px 1fr 40px;gap:10px}}
+        /* ============================================
+           COMPLETE STYLES - FIXED VERSION
+           ============================================ */
+        :root {
+            --ink-deep: #0A0A0B;
+            --ink: #17181A;
+            --ink-soft: #A9ACAE;
+            --canvas: #F4F2ED;
+            --panel: #FFFFFF;
+            --panel-soft: #EDEAE2;
+            --line: #2A2B2D;
+            --line-light: #DCD8CC;
+            --text-light: #26251F;
+            --text-light-soft: #5C5A52;
+            --gold: #B8923D;
+            --gold-bright: #D4AC5C;
+            --green: #5C8A6B;
+            --amber: #CFA23D;
+            --orange: #BE6A3D;
+            --red: #A6373A;
+            --radius: 2px;
+            --display: 'Poppins', sans-serif;
+            --sans: 'IBM Plex Sans', sans-serif;
+            --mono: 'IBM Plex Mono', monospace;
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            font-family: var(--sans);
+            background: var(--canvas);
+            color: var(--text-light);
+            line-height: 1.55;
+        }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        .hex-bg {
+            position: relative;
+            background: var(--ink-deep);
+            overflow: hidden;
+        }
+
+        .hex-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='104' viewBox='0 0 120 104'%3E%3Cpolygon points='30,0 90,0 120,52 90,104 30,104 0,52' fill='none' stroke='%23FFFFFF' stroke-opacity='0.045' stroke-width='1'/%3E%3C/svg%3E");
+            background-size: 120px 104px;
+            pointer-events: none;
+        }
+
+        .hex-bg > * { position: relative; z-index: 1; }
+
+        .atwa-mark {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .atwa-mark svg { display: block; }
+
+        .atwa-wordblock {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .atwa-wordblock .name {
+            font-family: var(--display);
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            color: #fff;
+            font-size: 15px;
+        }
+
+        .atwa-wordblock .sub {
+            font-family: var(--mono);
+            font-size: 8.5px;
+            letter-spacing: 0.22em;
+            color: var(--ink-soft);
+            text-transform: uppercase;
+            margin-top: 3px;
+        }
+
+        .brandbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 40px;
+        }
+
+        .brandbar .tagline {
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            color: var(--ink-soft);
+            text-transform: uppercase;
+        }
+
+        .hero {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 80px 40px 70px;
+        }
+
+        .hero-eyebrow {
+            font-family: var(--mono);
+            font-size: 11.5px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--gold-bright);
+            margin-bottom: 26px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero-eyebrow::before {
+            content: '';
+            width: 26px;
+            height: 1px;
+            background: var(--gold-bright);
+        }
+
+        .hero h1 {
+            font-family: var(--display);
+            font-weight: 700;
+            font-size: clamp(32px, 4.8vw, 54px);
+            line-height: 1.12;
+            letter-spacing: -0.01em;
+            margin: 0 0 24px;
+            max-width: 17ch;
+            color: #fff;
+        }
+
+        .hero h1 span { color: var(--gold-bright); }
+
+        .hero p.lede {
+            font-size: 17px;
+            color: var(--ink-soft);
+            max-width: 54ch;
+            margin: 0 0 40px;
+        }
+
+        .hero-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            border-top: 1px solid var(--line);
+            margin-top: 6px;
+        }
+
+        .hero-stat {
+            flex: 1;
+            min-width: 130px;
+            padding: 20px 24px 0 0;
+            border-right: 1px solid var(--line);
+        }
+
+        .hero-stat:last-child { border-right: none; }
+
+        .hero-stat .num {
+            font-family: var(--display);
+            font-weight: 700;
+            font-size: 26px;
+            color: var(--gold-bright);
+            display: block;
+        }
+
+        .hero-stat .label {
+            font-family: var(--mono);
+            font-size: 10.5px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+        }
+
+        .btn {
+            font-family: var(--sans);
+            font-weight: 600;
+            font-size: 15px;
+            padding: 15px 30px;
+            border-radius: var(--radius);
+            border: 1px solid var(--gold);
+            background: var(--gold);
+            color: #0A0A0B;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+
+        .btn:hover {
+            background: var(--gold-bright);
+            transform: translateY(-1px);
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid var(--gold-bright);
+            outline-offset: 3px;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: #fff;
+            border-color: #454648;
+        }
+
+        .btn-ghost:hover { background: #1E1F21; }
+
+        .btn-ghost.light {
+            color: var(--text-light);
+            border-color: var(--line-light);
+        }
+
+        .btn-ghost.light:hover { background: var(--panel-soft); }
+
+        .btn[disabled] {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .hero-cta { margin: 44px 0 44px; }
+
+        .trust-strip {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 40px 90px;
+        }
+
+        .trust-strip .strip-label {
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+            margin-bottom: 18px;
+        }
+
+        .chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .chip {
+            font-family: var(--sans);
+            font-size: 12.5px;
+            padding: 8px 14px;
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            color: var(--ink-soft);
+        }
+
+        .wizard-wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 50px 40px 100px;
+        }
+
+        .progress-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 44px;
+        }
+
+        .progress-track {
+            flex: 1;
+            height: 3px;
+            background: var(--line-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            background: var(--gold);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .progress-count {
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--text-light-soft);
+            white-space: nowrap;
+        }
+
+        .step-eyebrow {
+            font-family: var(--mono);
+            font-size: 11.5px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .step-title {
+            font-family: var(--display);
+            font-size: 29px;
+            font-weight: 700;
+            margin: 0 0 34px;
+            color: var(--text-light);
+        }
+
+        .help-text {
+            font-size: 14px;
+            color: var(--text-light-soft);
+            margin: -20px 0 20px 0;
+            font-style: italic;
+        }
+
+        .field-group {
+            margin-bottom: 30px;
+        }
+
+        .field-group label.q-label {
+            display: block;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-light);
+        }
+
+        .option-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .option-btn {
+            font-family: var(--sans);
+            font-size: 14px;
+            padding: 11px 18px;
+            border: 1px solid var(--line-light);
+            background: var(--panel);
+            color: var(--text-light);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.12s ease;
+        }
+
+        .option-btn:hover { border-color: var(--gold); }
+
+        .option-btn.selected {
+            background: var(--ink-deep);
+            border-color: var(--ink-deep);
+            color: #fff;
+        }
+
+        .option-btn:focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 2px;
+        }
+
+        input.q-input {
+            font-family: var(--sans);
+            font-size: 15px;
+            padding: 12px 14px;
+            border: 1px solid var(--line-light);
+            background: var(--panel);
+            color: var(--text-light);
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 340px;
+        }
+
+        input.q-input:focus {
+            outline: 2px solid var(--gold);
+            outline-offset: 1px;
+        }
+
+        .wizard-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid var(--line-light);
+        }
+
+        .results-wrap {
+            max-width: 940px;
+            margin: 0 auto;
+            padding: 50px 40px 60px;
+        }
+
+        .results-head {
+            display: flex;
+            gap: 56px;
+            align-items: center;
+            flex-wrap: wrap;
+            padding-bottom: 44px;
+            border-bottom: 1px solid var(--line-light);
+            margin-bottom: 44px;
+        }
+
+        .gauge-wrap {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            flex-shrink: 0;
+        }
+
+        .gauge-center {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gauge-score {
+            font-family: var(--display);
+            font-size: 50px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .gauge-tier {
+            font-family: var(--mono);
+            font-size: 10.5px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-top: 8px;
+            text-align: center;
+            max-width: 140px;
+        }
+
+        .results-headtext {
+            flex: 1;
+            min-width: 260px;
+        }
+
+        .results-headtext h2 {
+            font-family: var(--display);
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 0 12px;
+            color: var(--text-light);
+        }
+
+        .results-headtext p {
+            color: var(--text-light-soft);
+            font-size: 15px;
+            max-width: 44ch;
+            margin: 0;
+        }
+
+        .value-strip {
+            display: flex;
+            gap: 30px;
+            margin-top: 22px;
+            flex-wrap: wrap;
+        }
+
+        .value-metric .num {
+            font-family: var(--display);
+            font-weight: 700;
+            font-size: 21px;
+            display: block;
+            color: var(--text-light);
+        }
+
+        .value-metric .label {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-light-soft);
+        }
+
+        .cat-breakdown {
+            margin-bottom: 50px;
+        }
+
+        .section-label {
+            font-family: var(--mono);
+            font-size: 11.5px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-light-soft);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--line-light);
+        }
+
+        .cat-row {
+            display: grid;
+            grid-template-columns: 170px 1fr 50px;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--line-light);
+            font-size: 14px;
+        }
+
+        .cat-row:first-of-type {
+            border-top: 1px solid var(--line-light);
+        }
+
+        .cat-name {
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .cat-bar-track {
+            height: 8px;
+            background: var(--panel-soft);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .cat-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.6s ease;
+        }
+
+        .cat-score {
+            font-family: var(--mono);
+            text-align: right;
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        @media (max-width: 680px) {
+            .two-col { grid-template-columns: 1fr; }
+        }
+
+        .list-card {
+            border: 1px solid var(--line-light);
+            background: var(--panel);
+            padding: 26px 26px 10px;
+        }
+
+        .list-card h3 {
+            font-family: var(--display);
+            font-size: 18px;
+            margin: 0 0 16px;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        .list-card ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .list-card li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 14px;
+            padding: 0 0 16px;
+            color: var(--text-light-soft);
+        }
+
+        .mark {
+            flex-shrink: 0;
+            font-family: var(--mono);
+            font-size: 13px;
+            margin-top: 1px;
+        }
+
+        .mark.good { color: var(--green); }
+        .mark.risk { color: var(--red); }
+
+        .actions-block {
+            margin-bottom: 54px;
+        }
+
+        .action-item {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 20px;
+            padding: 22px 0;
+            border-bottom: 1px solid var(--line-light);
+        }
+
+        .action-item:first-of-type {
+            border-top: 1px solid var(--line-light);
+        }
+
+        .action-priority {
+            font-family: var(--mono);
+            font-size: 10.5px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        .action-item h4 {
+            font-family: var(--display);
+            font-size: 17px;
+            margin: 0 0 6px;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        .action-item p {
+            margin: 0 0 8px;
+            font-size: 14px;
+            color: var(--text-light-soft);
+        }
+
+        .action-service {
+            display: inline-block;
+            font-family: var(--mono);
+            font-size: 10.5px;
+            letter-spacing: 0.04em;
+            color: var(--gold);
+            background: #F4E9D2;
+            padding: 4px 9px;
+            border-radius: 20px;
+        }
+
+        .capture-card {
+            color: #F2F0EA;
+            padding: 46px 44px;
+            border-radius: var(--radius);
+            margin-bottom: 40px;
+        }
+
+        .capture-card h3 {
+            font-family: var(--display);
+            font-size: 25px;
+            margin: 0 0 10px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .capture-card p {
+            color: var(--ink-soft);
+            font-size: 14.5px;
+            margin: 0 0 28px;
+            max-width: 52ch;
+        }
+
+        .capture-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        @media (max-width: 600px) {
+            .capture-grid { grid-template-columns: 1fr; }
+        }
+
+        .capture-grid input {
+            font-family: var(--sans);
+            font-size: 14px;
+            padding: 13px 14px;
+            border: 1px solid var(--line);
+            background: #1B1C1E;
+            color: #F2F0EA;
+            border-radius: var(--radius);
+        }
+
+        .capture-grid input::placeholder {
+            color: #7A7C7F;
+        }
+
+        .capture-grid input:focus {
+            outline: 2px solid var(--gold);
+        }
+
+        .privacy-notice {
+            background: rgba(255,255,255,0.05);
+            border-left: 3px solid var(--gold);
+            padding: 16px 20px;
+            margin-bottom: 22px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: var(--ink-soft);
+            line-height: 1.6;
+        }
+
+        .privacy-notice strong {
+            color: #fff;
+        }
+
+        .privacy-notice a {
+            color: var(--gold-bright);
+            text-decoration: underline;
+        }
+
+        .capture-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 13.5px;
+            color: var(--ink-soft);
+            margin-bottom: 26px;
+        }
+
+        .capture-checkbox input[type="checkbox"] {
+            margin-top: 3px;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            accent-color: var(--gold);
+            cursor: pointer;
+        }
+
+        .post-capture {
+            display: none;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .post-capture.active { display: flex; }
+
+        .contact-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 36px;
+            padding: 36px 0 0;
+            border-top: 1px solid var(--line);
+            margin-top: 36px;
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--ink-soft);
+        }
+
+        .contact-strip strong {
+            display: block;
+            color: #fff;
+            font-family: var(--sans);
+            font-weight: 600;
+            font-size: 12.5px;
+            margin-bottom: 4px;
+        }
+
+        footer.disclaimer {
+            max-width: 940px;
+            margin: 0 auto;
+            padding: 0 40px 60px;
+            font-size: 12px;
+            color: var(--text-light-soft);
+            border-top: 1px solid var(--line-light);
+            padding-top: 24px;
+        }
+
+        .restart-link {
+            font-family: var(--mono);
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            color: var(--text-light-soft);
+            text-decoration: underline;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        @media (max-width: 640px) {
+            .brandbar { padding: 16px 22px; }
+            .hero { padding: 56px 22px 50px; }
+            .trust-strip { padding: 0 22px 70px; }
+            .wizard-wrap { padding: 36px 22px 70px; }
+            .results-wrap { padding: 36px 22px 40px; }
+            .capture-card { padding: 32px 24px; }
+            .cat-row { grid-template-columns: 120px 1fr 40px; gap: 10px; }
+        }
     </style>
 </head>
 <body>
 
-<!-- BRAND BAR -->
+<!-- ============================================================
+     BRAND BAR
+     ============================================================ -->
 <div class="brandbar hex-bg">
     <div class="atwa-mark">
         <svg viewBox="0 0 170 60" width="72" height="26">
@@ -142,7 +825,9 @@
     <div class="tagline">Compliance &amp; Risk Assessment</div>
 </div>
 
-<!-- LANDING -->
+<!-- ============================================================
+     LANDING SCREEN
+     ============================================================ -->
 <section id="screen-landing" class="screen active">
     <div class="hex-bg">
         <div class="hero">
@@ -172,7 +857,9 @@
     </div>
 </section>
 
-<!-- WIZARD -->
+<!-- ============================================================
+     WIZARD SCREEN
+     ============================================================ -->
 <section id="screen-wizard" class="screen">
     <div class="wizard-wrap">
         <div class="progress-row">
@@ -187,7 +874,9 @@
     </div>
 </section>
 
-<!-- RESULTS -->
+<!-- ============================================================
+     RESULTS SCREEN
+     ============================================================ -->
 <section id="screen-results" class="screen">
     <div class="results-wrap">
         <div class="results-head">
@@ -234,7 +923,6 @@
             <div id="actionsList"></div>
         </div>
 
-        <!-- LEAD CAPTURE -->
         <div class="capture-card hex-bg">
             <h3>Get your full ATWA report</h3>
             <p>Enter your details to unlock a branded PDF of this assessment — every score, risk, and recommendation — plus the option to book a complimentary review with one of our advisors.</p>
@@ -289,21 +977,25 @@
     </footer>
 </section>
 
+<!-- ============================================================
+     JAVASCRIPT - FIXED VERSION
+     ============================================================ -->
 <script>
-// ============================================================
-// FULL WORKING APPLICATION - SINGLE FILE VERSION
-// ============================================================
+/**
+ * ============================================================
+ * ATWA COMPLIANCE ASSESSMENT - FIXED VERSION
+ * The Continue button now works properly!
+ * ============================================================
+ */
 
 (function() {
     'use strict';
 
-    // CONFIG
-    const APP_CONFIG = {
-        appName: 'ATWA Compliance Assessment',
-        appVersion: '1.1.0',
-        features: { localStorage: true }
-    };
+    console.log('🚀 ATWA Compliance Assessment - Fixed Version Loading...');
 
+    // ============================================================
+    // CONFIG
+    // ============================================================
     const COMPLIANCE_CATEGORIES = ['accounting', 'vat', 'corptax', 'payroll', 'audit', 'licenses'];
     const CATEGORY_NAMES = {
         accounting: 'Accounting',
@@ -315,28 +1007,93 @@
     };
     const SCREENS = { LANDING: 'screen-landing', WIZARD: 'screen-wizard', RESULTS: 'screen-results' };
 
+    // ============================================================
     // STATE MANAGER
+    // ============================================================
     const StateManager = {
         state: { currentStep: 0, answers: {}, company: {}, unlocked: false, scoreData: null, isComplete: false },
+
         getCurrentStep() { return this.state.currentStep; },
-        setCurrentStep(step) { if (typeof step === 'number' && step >= 0) { this.state.currentStep = step; this.save(); } },
+        setCurrentStep(step) { 
+            if (typeof step === 'number' && step >= 0) {
+                this.state.currentStep = step;
+                this.save();
+            }
+        },
         getAnswers() { return { ...this.state.answers }; },
         getAnswer(id) { return this.state.answers[id] || null; },
-        setAnswer(id, value) { if (id && value) { this.state.answers[id] = { label: value.label || '', points: value.points || 0 }; this.save(); } },
+        setAnswer(id, value) {
+            if (id && value) {
+                this.state.answers[id] = { 
+                    label: value.label || '', 
+                    points: value.points || 0 
+                };
+                this.save();
+                // Re-validate the current step
+                this.validateCurrentStep();
+            }
+        },
         getCompany() { return { ...this.state.company }; },
-        setCompany(data) { this.state.company = { ...this.state.company, ...data }; this.save(); },
+        setCompany(data) {
+            this.state.company = { ...this.state.company, ...data };
+            this.save();
+            // Re-validate the current step
+            this.validateCurrentStep();
+        },
         isUnlocked() { return this.state.unlocked; },
         unlock() { this.state.unlocked = true; this.save(); },
         getScoreData() { return this.state.scoreData ? { ...this.state.scoreData } : null; },
-        setScoreData(data) { if (data) { this.state.scoreData = { ...data }; this.state.isComplete = true; this.save(); } },
+        setScoreData(data) {
+            if (data) {
+                this.state.scoreData = { ...data };
+                this.state.isComplete = true;
+                this.save();
+            }
+        },
         isComplete() { return this.state.isComplete; },
-        reset() { this.state = { currentStep: 0, answers: {}, company: {}, unlocked: false, scoreData: null, isComplete: false }; this.clear(); },
-        save() { try { localStorage.setItem('atwa_assessment_state', JSON.stringify(this.state)); } catch(e) {} },
-        load() { try { const saved = localStorage.getItem('atwa_assessment_state'); if (saved) { const parsed = JSON.parse(saved); this.state = { ...this.state, ...parsed }; return true; } } catch(e) {} return false; },
-        clear() { try { localStorage.removeItem('atwa_assessment_state'); } catch(e) {} }
+        reset() {
+            this.state = {
+                currentStep: 0,
+                answers: {},
+                company: {},
+                unlocked: false,
+                scoreData: null,
+                isComplete: false
+            };
+            this.clear();
+        },
+        save() {
+            try {
+                localStorage.setItem('atwa_assessment_state', JSON.stringify(this.state));
+            } catch(e) { /* ignore */ }
+        },
+        load() {
+            try {
+                const saved = localStorage.getItem('atwa_assessment_state');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    this.state = { ...this.state, ...parsed };
+                    return true;
+                }
+            } catch(e) { /* ignore */ }
+            return false;
+        },
+        clear() {
+            try {
+                localStorage.removeItem('atwa_assessment_state');
+            } catch(e) { /* ignore */ }
+        },
+        // NEW: Validate current step and update button
+        validateCurrentStep() {
+            if (typeof App !== 'undefined' && App.validateStep) {
+                App.validateStep();
+            }
+        }
     };
 
+    // ============================================================
     // ASSESSMENT DATA
+    // ============================================================
     const AssessmentData = {
         getCompanyStep() {
             return {
@@ -344,78 +1101,169 @@
                 title: 'Tell us about your business',
                 eyebrow: 'Step 1 · Company information',
                 fields: [
-                    { id: 'legalForm', label: 'Is your business Mainland or Free Zone?', type: 'options', options: ['Mainland', 'Free Zone', 'Offshore'] },
-                    { id: 'yearEstablished', label: 'What year was the business established?', type: 'number', placeholder: 'e.g. 2019' },
-                    { id: 'employees', label: 'How many employees do you have?', type: 'options', options: ['None', '1–5', '6–20', '21–50', '50+'] },
-                    { id: 'turnover', label: 'What is your approximate annual turnover?', type: 'options', options: ['Under AED 1M', 'AED 1M–3M', 'AED 3M–50M', 'AED 50M+'] },
-                    { id: 'industry', label: 'What industry are you in?', type: 'options', options: ['Trading', 'Professional Services', 'Retail', 'Construction', 'Real Estate', 'Hospitality', 'Manufacturing', 'Other'] }
+                    { id: 'legalForm', label: 'Is your business Mainland or Free Zone?', type: 'options',
+                        options: ['Mainland', 'Free Zone', 'Offshore'] },
+                    { id: 'yearEstablished', label: 'What year was the business established?', type: 'number',
+                        placeholder: 'e.g. 2019' },
+                    { id: 'employees', label: 'How many employees do you have?', type: 'options',
+                        options: ['None', '1–5', '6–20', '21–50', '50+'] },
+                    { id: 'turnover', label: 'What is your approximate annual turnover?', type: 'options',
+                        options: ['Under AED 1M', 'AED 1M–3M', 'AED 3M–50M', 'AED 50M+'] },
+                    { id: 'industry', label: 'What industry are you in?', type: 'options',
+                        options: ['Trading', 'Professional Services', 'Retail', 'Construction', 'Real Estate',
+                            'Hospitality', 'Manufacturing', 'Other'
+                        ] }
                 ]
             };
         },
+
         getScoredSteps() {
-            return [
-                { id: 'accounting', title: 'Accounting', eyebrow: 'Step 2 · Accounting', description: 'Good accounting practices are the foundation of compliance.',
-                    questions: [
-                        { id: 'acc_bookkeeping', text: 'Do you maintain monthly bookkeeping?', options: [{ label: 'Yes', points: 0 }, { label: 'Quarterly', points: 5 }, { label: 'No', points: 15 }, { label: 'Not sure', points: 20 }] },
-                        { id: 'acc_reports', text: 'Do you receive monthly financial reports?', options: [{ label: 'Yes', points: 0 }, { label: 'Quarterly', points: 8 }, { label: 'Never', points: 15 }] },
-                        { id: 'acc_prepares', text: 'Who prepares your accounts?', options: [{ label: 'Internal accountant', points: 0 }, { label: 'Outsourced firm', points: 0 }, { label: 'Freelancer', points: 8 }, { label: 'Nobody', points: 20 }] }
-                    ]
-                },
-                { id: 'vat', title: 'VAT', eyebrow: 'Step 3 · VAT', description: 'VAT compliance is critical to avoid FTA penalties.',
-                    questions: [
-                        { id: 'vat_registered', text: 'Is your business VAT registered?', options: [{ label: 'Yes', points: 0 }, { label: 'No, not required', points: 0 }, { label: 'No, but should be', points: 25 }, { label: 'Not sure', points: 20 }] },
-                        { id: 'vat_frequency', text: 'How often do you file VAT returns?', options: [{ label: 'Monthly', points: 0 }, { label: 'Quarterly', points: 0 }, { label: 'Irregularly', points: 15 }, { label: 'Not applicable', points: 0 }] },
-                        { id: 'vat_late', text: 'Have you had any late VAT filings?', options: [{ label: 'Never', points: 0 }, { label: 'Once or twice', points: 10 }, { label: 'Frequently', points: 20 }] },
-                        { id: 'vat_notice', text: 'Have you ever received an FTA notice?', options: [{ label: 'No', points: 0 }, { label: 'Yes, resolved', points: 10 }, { label: 'Yes, unresolved', points: 25 }] }
-                    ]
-                },
-                { id: 'corptax', title: 'Corporate Tax', eyebrow: 'Step 4 · Corporate tax', description: 'Corporate Tax registration and filing are now mandatory for most UAE businesses.',
-                    questions: [
-                        { id: 'ct_registered', text: 'Is your business registered for Corporate Tax?', options: [{ label: 'Yes', points: 0 }, { label: 'No', points: 25 }, { label: 'Not sure', points: 20 }] },
-                        { id: 'ct_filed', text: 'If a return is due, has it been filed or is it on track?', options: [{ label: 'Yes / on track', points: 0 }, { label: 'No', points: 20 }, { label: 'Not applicable yet', points: 0 }] },
-                        { id: 'ct_relief', text: 'Do you know whether you qualify for Small Business Relief?', options: [{ label: 'Yes, confirmed', points: 0 }, { label: 'No / not sure', points: 12 }] }
-                    ]
-                },
-                { id: 'payroll', title: 'Payroll', eyebrow: 'Step 5 · Payroll', description: 'WPS compliance ensures your payroll meets MOHRE and Central Bank requirements.',
-                    questions: [
-                        { id: 'pay_wps', text: 'Is your payroll WPS compliant?', options: [{ label: 'Yes', points: 0 }, { label: 'No', points: 20 }, { label: 'Not applicable', points: 0 }] },
-                        { id: 'pay_timely', text: 'Is payroll processed accurately and on time each month?', options: [{ label: 'Yes', points: 0 }, { label: 'Sometimes late', points: 10 }, { label: 'No / not applicable process', points: 18 }] }
-                    ]
-                },
-                { id: 'audit', title: 'Audit', eyebrow: 'Step 6 · Audit', description: 'Some UAE business types require audited financial statements.',
-                    questions: [
-                        { id: 'audit_required', text: 'Is an audit required for your license type?', options: [{ label: 'Yes', points: 0 }, { label: 'No', points: 0 }, { label: 'Not sure', points: 8 }] },
-                        { id: 'audit_last', text: 'When was your last audit completed?', options: [{ label: 'Within 12 months', points: 0 }, { label: '1–2 years ago', points: 10 }, { label: 'Never / overdue', points: 22 }] }
-                    ]
-                },
-                { id: 'licenses', title: 'Licenses & Governance', eyebrow: 'Step 7 · Licenses & governance', description: 'License renewal and UBO filings are key governance obligations.',
-                    questions: [
-                        { id: 'lic_current', text: 'Is your trade license current?', options: [{ label: 'Yes', points: 0 }, { label: 'Expiring soon', points: 8 }, { label: 'Expired', points: 25 }] },
-                        { id: 'lic_ubo', text: 'Is your UBO (Ultimate Beneficial Owner) information up to date?', options: [{ label: 'Yes', points: 0 }, { label: 'Not sure', points: 12 }, { label: 'No', points: 20 }] },
-                        { id: 'lic_tracked', text: 'Are your renewals tracked systematically?', options: [{ label: 'Yes', points: 0 }, { label: 'Somewhat', points: 6 }, { label: 'No', points: 14 }] }
-                    ]
-                },
-                { id: 'value', title: 'Business Value', eyebrow: 'Step 8 · Running the business', description: 'Proactive financial management supports better compliance and growth.',
-                    questions: [
-                        { id: 'val_profit', text: 'Do you review profit monthly?', options: [{ label: 'Yes', points: 0 }, { label: 'No', points: 10 }] },
-                        { id: 'val_mgmt', text: 'Do you receive management reports?', options: [{ label: 'Yes', points: 0 }, { label: 'No', points: 10 }] },
-                        { id: 'val_payroll_cost', text: 'Do you track payroll costs?', options: [{ label: 'Yes', points: 0 }, { label: 'No', points: 8 }] },
-                        { id: 'val_taxfc', text: 'Do you forecast tax liabilities?', options: [{ label: 'Yes', points: 0 }, { label: 'No', points: 8 }] },
-                        { id: 'val_cashflow', text: 'Do you maintain a cash-flow forecast?', options: [{ label: 'Yes', points: 0 }, { label: 'No', points: 10 }] }
-                    ]
-                }
-            ];
+            return [{
+                id: 'accounting',
+                title: 'Accounting',
+                eyebrow: 'Step 2 · Accounting',
+                description: 'Good accounting practices are the foundation of compliance.',
+                questions: [
+                    { id: 'acc_bookkeeping', text: 'Do you maintain monthly bookkeeping?', options: [{ label: 'Yes',
+                            points: 0 }, { label: 'Quarterly', points: 5 }, { label: 'No', points: 15 },
+                        { label: 'Not sure', points: 20 }
+                        ] },
+                    { id: 'acc_reports', text: 'Do you receive monthly financial reports?', options: [{ label: 'Yes',
+                            points: 0 }, { label: 'Quarterly', points: 8 }, { label: 'Never', points: 15 }] },
+                    { id: 'acc_prepares', text: 'Who prepares your accounts?', options: [{ label: 'Internal accountant',
+                            points: 0 }, { label: 'Outsourced firm', points: 0 }, { label: 'Freelancer',
+                            points: 8 }, { label: 'Nobody', points: 20 }] }
+                ]
+            }, {
+                id: 'vat',
+                title: 'VAT',
+                eyebrow: 'Step 3 · VAT',
+                description: 'VAT compliance is critical to avoid FTA penalties.',
+                questions: [
+                    { id: 'vat_registered', text: 'Is your business VAT registered?', options: [{ label: 'Yes',
+                            points: 0 }, { label: 'No, not required', points: 0 }, { label: 'No, but should be',
+                            points: 25 }, { label: 'Not sure', points: 20 }] },
+                    { id: 'vat_frequency', text: 'How often do you file VAT returns?', options: [{ label: 'Monthly',
+                            points: 0 }, { label: 'Quarterly', points: 0 }, { label: 'Irregularly', points: 15 },
+                        { label: 'Not applicable', points: 0 }] },
+                    { id: 'vat_late', text: 'Have you had any late VAT filings?', options: [{ label: 'Never',
+                            points: 0 }, { label: 'Once or twice', points: 10 }, { label: 'Frequently',
+                            points: 20 }] },
+                    { id: 'vat_notice', text: 'Have you ever received an FTA notice?', options: [{ label: 'No',
+                            points: 0 }, { label: 'Yes, resolved', points: 10 }, { label: 'Yes, unresolved',
+                            points: 25 }] }
+                ]
+            }, {
+                id: 'corptax',
+                title: 'Corporate Tax',
+                eyebrow: 'Step 4 · Corporate tax',
+                description: 'Corporate Tax registration and filing are now mandatory for most UAE businesses.',
+                questions: [
+                    { id: 'ct_registered', text: 'Is your business registered for Corporate Tax?', options: [
+                            { label: 'Yes', points: 0 }, { label: 'No', points: 25 }, { label: 'Not sure',
+                                points: 20 }
+                        ] },
+                    { id: 'ct_filed', text: 'If a return is due, has it been filed or is it on track?', options: [
+                            { label: 'Yes / on track', points: 0 }, { label: 'No', points: 20 },
+                            { label: 'Not applicable yet', points: 0 }
+                        ] },
+                    { id: 'ct_relief', text: 'Do you know whether you qualify for Small Business Relief?',
+                        options: [{ label: 'Yes, confirmed', points: 0 }, { label: 'No / not sure', points: 12 }] }
+                ]
+            }, {
+                id: 'payroll',
+                title: 'Payroll',
+                eyebrow: 'Step 5 · Payroll',
+                description: 'WPS compliance ensures your payroll meets MOHRE and Central Bank requirements.',
+                questions: [
+                    { id: 'pay_wps', text: 'Is your payroll WPS compliant?', options: [{ label: 'Yes', points: 0 },
+                        { label: 'No', points: 20 }, { label: 'Not applicable', points: 0 }] },
+                    { id: 'pay_timely', text: 'Is payroll processed accurately and on time each month?', options: [
+                            { label: 'Yes', points: 0 }, { label: 'Sometimes late', points: 10 },
+                            { label: 'No / not applicable process', points: 18 }
+                        ] }
+                ]
+            }, {
+                id: 'audit',
+                title: 'Audit',
+                eyebrow: 'Step 6 · Audit',
+                description: 'Some UAE business types require audited financial statements.',
+                questions: [
+                    { id: 'audit_required', text: 'Is an audit required for your license type?', options: [
+                            { label: 'Yes', points: 0 }, { label: 'No', points: 0 }, { label: 'Not sure',
+                                points: 8 }
+                        ] },
+                    { id: 'audit_last', text: 'When was your last audit completed?', options: [{ label: 'Within 12 months',
+                            points: 0 }, { label: '1–2 years ago', points: 10 }, { label: 'Never / overdue',
+                            points: 22 }] }
+                ]
+            }, {
+                id: 'licenses',
+                title: 'Licenses & Governance',
+                eyebrow: 'Step 7 · Licenses & governance',
+                description: 'License renewal and UBO filings are key governance obligations.',
+                questions: [
+                    { id: 'lic_current', text: 'Is your trade license current?', options: [{ label: 'Yes',
+                            points: 0 }, { label: 'Expiring soon', points: 8 }, { label: 'Expired', points: 25 }] },
+                    { id: 'lic_ubo', text: 'Is your UBO (Ultimate Beneficial Owner) information up to date?',
+                        options: [{ label: 'Yes', points: 0 }, { label: 'Not sure', points: 12 }, { label: 'No',
+                                points: 20 }] },
+                    { id: 'lic_tracked', text: 'Are your renewals tracked systematically?', options: [{ label: 'Yes',
+                            points: 0 }, { label: 'Somewhat', points: 6 }, { label: 'No', points: 14 }] }
+                ]
+            }, {
+                id: 'value',
+                title: 'Business Value',
+                eyebrow: 'Step 8 · Running the business',
+                description: 'Proactive financial management supports better compliance and growth.',
+                questions: [
+                    { id: 'val_profit', text: 'Do you review profit monthly?', options: [{ label: 'Yes', points: 0 },
+                        { label: 'No', points: 10 }] },
+                    { id: 'val_mgmt', text: 'Do you receive management reports?', options: [{ label: 'Yes',
+                            points: 0 }, { label: 'No', points: 10 }] },
+                    { id: 'val_payroll_cost', text: 'Do you track payroll costs?', options: [{ label: 'Yes',
+                            points: 0 }, { label: 'No', points: 8 }] },
+                    { id: 'val_taxfc', text: 'Do you forecast tax liabilities?', options: [{ label: 'Yes', points: 0 },
+                        { label: 'No', points: 8 }] },
+                    { id: 'val_cashflow', text: 'Do you maintain a cash-flow forecast?', options: [{ label: 'Yes',
+                            points: 0 }, { label: 'No', points: 10 }] }
+                ]
+            }];
         },
-        getAllSteps() { return [this.getCompanyStep(), ...this.getScoredSteps()]; },
-        getAllQuestions() { const qs = []; this.getScoredSteps().forEach(s => { s.questions.forEach(q => { qs.push({ ...q, category: s.id, categoryTitle: s.title }); }); }); return qs; },
-        getMaxPoints(q) { return Math.max(...q.options.map(o => o.points)); },
-        getCategoryForQuestion(id) { for (const s of this.getScoredSteps()) { if (s.questions.some(q => q.id === id)) return s.id; } return null; }
+
+        getAllSteps() {
+            return [this.getCompanyStep(), ...this.getScoredSteps()];
+        },
+
+        getAllQuestions() {
+            const questions = [];
+            this.getScoredSteps().forEach(step => {
+                step.questions.forEach(q => {
+                    questions.push({ ...q, category: step.id, categoryTitle: step.title });
+                });
+            });
+            return questions;
+        },
+
+        getMaxPoints(question) {
+            return Math.max(...question.options.map(o => o.points));
+        },
+
+        getCategoryForQuestion(questionId) {
+            for (const step of this.getScoredSteps()) {
+                if (step.questions.some(q => q.id === questionId)) return step.id;
+            }
+            return null;
+        }
     };
 
+    // ============================================================
     // SCORING ENGINE
+    // ============================================================
     const ScoringEngine = {
         calculateCategoryScore(questions, answers) {
-            let riskSum = 0, maxRisk = 0;
+            let riskSum = 0,
+                maxRisk = 0;
             questions.forEach(q => {
                 const chosen = answers[q.id];
                 const maxPts = AssessmentData.getMaxPoints(q);
@@ -425,11 +1273,14 @@
             const healthScore = maxRisk > 0 ? Math.round(100 - (riskSum / maxRisk) * 100) : 100;
             return { riskSum, maxRisk, healthScore };
         },
+
         calculateOverallScore(categoryScores, categoryIds) {
-            const scores = categoryIds.map(id => categoryScores[id]?.healthScore || 0).filter(s => s !== undefined && s !== null);
+            const scores = categoryIds.map(id => categoryScores[id]?.healthScore || 0).filter(s => s !== undefined && s !==
+                null);
             if (scores.length === 0) return 0;
             return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
         },
+
         getTier(score) {
             if (score >= 85) return { label: 'Excellent', color: '#5C8A6B', key: 'excellent' };
             if (score >= 70) return { label: 'Good', color: '#7A9B6B', key: 'good' };
@@ -437,49 +1288,128 @@
             if (score >= 30) return { label: 'High Risk', color: '#BE6A3D', key: 'highRisk' };
             return { label: 'Immediate Action Required', color: '#A6373A', key: 'critical' };
         },
+
         identifyStrengths(questions, answers) {
             const strengths = [];
             questions.forEach(q => {
                 const chosen = answers[q.id];
                 if (chosen && chosen.points === 0) {
-                    let cleanText = q.text.replace(/^(Do you|Is your|Are your|Have you|When was|Who prepares|How often)/, '').trim();
+                    let cleanText = q.text.replace(
+                        /^(Do you|Is your|Are your|Have you|When was|Who prepares|How often)/, '').trim();
                     strengths.push(`${cleanText} — ${chosen.label}`);
                 }
             });
             return strengths;
         },
+
         identifyRisks(questions, answers, threshold = 10) {
             const risks = [];
             questions.forEach(q => {
                 const chosen = answers[q.id];
                 if (chosen && chosen.points >= threshold) {
-                    risks.push({ qid: q.id, text: q.text, label: chosen.label, points: chosen.points, category: AssessmentData.getCategoryForQuestion(q.id) });
+                    risks.push({
+                        qid: q.id,
+                        text: q.text,
+                        label: chosen.label,
+                        points: chosen.points,
+                        category: AssessmentData.getCategoryForQuestion(q.id)
+                    });
                 }
             });
             risks.sort((a, b) => b.points - a.points);
             return risks;
         },
+
         getActionLibrary() {
             return {
-                ct_registered: { title: 'Register for Corporate Tax', text: 'Corporate Tax registration is mandatory for most UAE businesses.', service: 'Corporate Tax Registration' },
-                vat_registered: { title: 'Confirm your VAT position', text: 'Clarify whether you meet the mandatory or voluntary VAT registration threshold.', service: 'VAT Registration' },
-                vat_notice: { title: 'Resolve outstanding FTA notice', text: 'An unresolved FTA notice can escalate into penalties or an audit.', service: 'Tax Reconsideration & Exemption Services' },
-                audit_last: { title: 'Schedule an audit', text: 'An overdue or missing audit can jeopardise license renewal.', service: 'External Audit' },
-                lic_current: { title: 'Renew your trade license', text: 'Operating on an expired license exposes the business to fines.', service: 'PRO Services — Document Renewals' },
-                acc_bookkeeping: { title: 'Formalise monthly bookkeeping', text: 'Consistent monthly bookkeeping is the foundation of compliance.', service: 'Bookkeeping & Record-Keeping' },
-                acc_prepares: { title: 'Assign clear ownership of your accounts', text: 'Books with no consistent preparer lead to late filings.', service: 'Financial Statements Preparation' },
-                pay_wps: { title: 'Bring payroll into WPS compliance', text: 'Non-compliant payroll can trigger MOHRE penalties.', service: 'Payroll Processing' },
-                lic_ubo: { title: 'Update UBO records', text: 'Outdated UBO filings can delay license renewals.', service: 'goAML Compliance Services' },
-                vat_late: { title: 'Tighten your VAT filing calendar', text: 'Repeated late filings compound penalties over time.', service: 'VAT Compliance Audit' },
-                ct_relief: { title: 'Assess Small Business Relief eligibility', text: 'Confirming your eligibility could reduce your Corporate Tax liability.', service: 'Tax Planning & Advisory Services' },
-                lic_tracked: { title: 'Set up a renewals tracker', text: 'A simple renewals calendar prevents license and permit lapses.', service: 'PRO Services — Visa & Document Renewals' },
-                acc_reports: { title: 'Move to monthly management reporting', text: 'Monthly reports let you catch issues while there is still time to act.', service: 'Financial Statements Preparation' },
-                pay_timely: { title: 'Stabilise your payroll cycle', text: 'Late or inconsistent payroll runs create compliance exposure.', service: 'Payroll Processing' },
-                val_cashflow: { title: 'Build a rolling cash-flow forecast', text: 'A simple 13-week cash-flow view is one of the highest-leverage tools for SMEs.', service: 'Tax Planning & Advisory Services' },
-                val_mgmt: { title: 'Start receiving management reports', text: 'Management reports translate bookkeeping into actionable decisions.', service: 'Financial Statements Preparation' },
-                val_taxfc: { title: 'Forecast upcoming tax liabilities', text: 'Knowing your tax position ahead of time avoids cash-flow surprises.', service: 'Tax Planning & Advisory Services' }
+                ct_registered: {
+                    title: 'Register for Corporate Tax',
+                    text: 'Corporate Tax registration is mandatory for most UAE businesses.',
+                    service: 'Corporate Tax Registration'
+                },
+                vat_registered: {
+                    title: 'Confirm your VAT position',
+                    text: 'Clarify whether you meet the mandatory or voluntary VAT registration threshold.',
+                    service: 'VAT Registration'
+                },
+                vat_notice: {
+                    title: 'Resolve outstanding FTA notice',
+                    text: 'An unresolved FTA notice can escalate into penalties or an audit.',
+                    service: 'Tax Reconsideration & Exemption Services'
+                },
+                audit_last: {
+                    title: 'Schedule an audit',
+                    text: 'An overdue or missing audit can jeopardise license renewal.',
+                    service: 'External Audit'
+                },
+                lic_current: {
+                    title: 'Renew your trade license',
+                    text: 'Operating on an expired license exposes the business to fines.',
+                    service: 'PRO Services — Document Renewals'
+                },
+                acc_bookkeeping: {
+                    title: 'Formalise monthly bookkeeping',
+                    text: 'Consistent monthly bookkeeping is the foundation of compliance.',
+                    service: 'Bookkeeping & Record-Keeping'
+                },
+                acc_prepares: {
+                    title: 'Assign clear ownership of your accounts',
+                    text: 'Books with no consistent preparer lead to late filings.',
+                    service: 'Financial Statements Preparation'
+                },
+                pay_wps: {
+                    title: 'Bring payroll into WPS compliance',
+                    text: 'Non-compliant payroll can trigger MOHRE penalties.',
+                    service: 'Payroll Processing'
+                },
+                lic_ubo: {
+                    title: 'Update UBO records',
+                    text: 'Outdated UBO filings can delay license renewals.',
+                    service: 'goAML Compliance Services'
+                },
+                vat_late: {
+                    title: 'Tighten your VAT filing calendar',
+                    text: 'Repeated late filings compound penalties over time.',
+                    service: 'VAT Compliance Audit'
+                },
+                ct_relief: {
+                    title: 'Assess Small Business Relief eligibility',
+                    text: 'Confirming your eligibility could reduce your Corporate Tax liability.',
+                    service: 'Tax Planning & Advisory Services'
+                },
+                lic_tracked: {
+                    title: 'Set up a renewals tracker',
+                    text: 'A simple renewals calendar prevents license and permit lapses.',
+                    service: 'PRO Services — Visa & Document Renewals'
+                },
+                acc_reports: {
+                    title: 'Move to monthly management reporting',
+                    text: 'Monthly reports let you catch issues while there is still time to act.',
+                    service: 'Financial Statements Preparation'
+                },
+                pay_timely: {
+                    title: 'Stabilise your payroll cycle',
+                    text: 'Late or inconsistent payroll runs create compliance exposure.',
+                    service: 'Payroll Processing'
+                },
+                val_cashflow: {
+                    title: 'Build a rolling cash-flow forecast',
+                    text: 'A simple 13-week cash-flow view is one of the highest-leverage tools for SMEs.',
+                    service: 'Tax Planning & Advisory Services'
+                },
+                val_mgmt: {
+                    title: 'Start receiving management reports',
+                    text: 'Management reports translate bookkeeping into actionable decisions.',
+                    service: 'Financial Statements Preparation'
+                },
+                val_taxfc: {
+                    title: 'Forecast upcoming tax liabilities',
+                    text: 'Knowing your tax position ahead of time avoids cash-flow surprises.',
+                    service: 'Tax Planning & Advisory Services'
+                }
             };
         },
+
         recommendActions(risks, maxActions = 3) {
             const actions = [];
             const library = this.getActionLibrary();
@@ -490,30 +1420,56 @@
                 }
             }
             if (actions.length === 0) {
-                actions.push({ title: 'Maintain your current controls', text: 'No major risks were flagged. Keep your current routines in place.', service: 'Annual Compliance Support', priority: 1 });
+                actions.push({
+                    title: 'Maintain your current controls',
+                    text: 'No major risks were flagged. Keep your current routines in place.',
+                    service: 'Annual Compliance Support',
+                    priority: 1
+                });
             }
             return actions;
         },
+
         computeResults(answers, company) {
             const scoredSteps = AssessmentData.getScoredSteps();
             const allQuestions = AssessmentData.getAllQuestions();
             const categoryIds = COMPLIANCE_CATEGORIES;
+
             const categoryScores = {};
             scoredSteps.forEach(step => {
-                categoryScores[step.id] = { name: step.title, ...this.calculateCategoryScore(step.questions, answers) };
+                categoryScores[step.id] = {
+                    name: step.title,
+                    ...this.calculateCategoryScore(step.questions, answers)
+                };
             });
+
             const overall = this.calculateOverallScore(categoryScores, categoryIds);
             const valueScore = categoryScores['value']?.healthScore || 0;
             const strengths = this.identifyStrengths(allQuestions, answers);
             const risks = this.identifyRisks(allQuestions, answers);
             const actions = this.recommendActions(risks);
-            return { categoryScores, overall, valueScore, strengths, risks, actions, tier: this.getTier(overall), company: { ...company }, totalQuestions: allQuestions.length, answeredQuestions: Object.keys(answers).length };
+
+            return {
+                categoryScores,
+                overall,
+                valueScore,
+                strengths,
+                risks,
+                actions,
+                tier: this.getTier(overall),
+                company: { ...company },
+                totalQuestions: allQuestions.length,
+                answeredQuestions: Object.keys(answers).length
+            };
         }
     };
 
+    // ============================================================
     // UI RENDERER
+    // ============================================================
     const UIRenderer = {
         elements: {},
+
         cacheElements() {
             this.elements = {
                 stepContent: document.getElementById('stepContent'),
@@ -546,21 +1502,27 @@
                 actionsList: document.getElementById('actionsList')
             };
         },
+
         showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             const target = document.getElementById(screenId);
             if (target) target.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         },
+
         renderStep(step, state, stepIndex, totalSteps) {
             const container = this.elements.stepContent;
             if (!container) return;
+
             this.elements.progressCount.textContent = `Step ${stepIndex + 1} of ${totalSteps}`;
             this.elements.progressFill.style.width = `${(stepIndex / (totalSteps - 1)) * 100}%`;
             this.elements.backBtn.style.visibility = stepIndex === 0 ? 'hidden' : 'visible';
             this.elements.nextBtn.textContent = stepIndex === totalSteps - 1 ? 'See my results →' : 'Continue →';
-            let html = `<div class="step-eyebrow">${step.eyebrow}</div><h2 class="step-title">${step.title}</h2>`;
+
+            let html = `<div class="step-eyebrow">${step.eyebrow}</div>`;
+            html += `<h2 class="step-title">${step.title}</h2>`;
             if (step.description) html += `<p class="help-text">${step.description}</p>`;
+
             if (step.id === 'company') {
                 step.fields.forEach(f => {
                     html += `<div class="field-group"><label class="q-label">${f.label}</label>`;
@@ -568,88 +1530,175 @@
                         html += `<div class="option-grid" data-field="${f.id}">`;
                         f.options.forEach(opt => {
                             const sel = state.company[f.id] === opt ? 'selected' : '';
-                            html += `<button type="button" class="option-btn ${sel}" data-value="${opt}">${opt}</button>`;
+                            html +=
+                                `<button type="button" class="option-btn ${sel}" data-value="${opt}">${opt}</button>`;
                         });
                         html += `</div>`;
                     } else {
                         const value = state.company[f.id] || '';
-                        html += `<input class="q-input" type="${f.type}" placeholder="${f.placeholder || ''}" value="${value}">`;
+                        html +=
+                            `<input class="q-input" type="${f.type}" placeholder="${f.placeholder || ''}" value="${value}">`;
                     }
                     html += `</div>`;
                 });
             } else {
                 step.questions.forEach(q => {
-                    html += `<div class="field-group"><label class="q-label">${q.text}</label><div class="option-grid" data-qid="${q.id}">`;
+                    html += `<div class="field-group"><label class="q-label">${q.text}</label>`;
+                    html += `<div class="option-grid" data-qid="${q.id}">`;
                     q.options.forEach(opt => {
-                        const selected = state.answers[q.id] && state.answers[q.id].label === opt.label ? 'selected' : '';
-                        html += `<button type="button" class="option-btn ${selected}" data-label="${opt.label}" data-points="${opt.points}">${opt.label}</button>`;
+                        const selected = state.answers[q.id] && state.answers[q.id].label === opt.label ?
+                            'selected' : '';
+                        html +=
+                            `<button type="button" class="option-btn ${selected}" data-label="${opt.label}" data-points="${opt.points}">${opt.label}</button>`;
                     });
                     html += `</div></div>`;
                 });
             }
+
             container.innerHTML = html;
+
+            // --- EVENT LISTENERS ---
+            // For option buttons
             container.querySelectorAll('.option-grid').forEach(grid => {
                 const fieldId = grid.dataset.field;
                 const qid = grid.dataset.qid;
+
                 grid.querySelectorAll('.option-btn').forEach(btn => {
                     btn.addEventListener('click', function() {
+                        // Deselect all in this group
                         grid.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
                         this.classList.add('selected');
-                        if (fieldId) { StateManager.setCompany({ [fieldId]: this.dataset.value }); }
-                        else if (qid) { StateManager.setAnswer(qid, { label: this.dataset.label, points: parseInt(this.dataset.points) || 0 }); }
-                        UIRenderer.validateStep(step, state);
+
+                        if (fieldId) {
+                            // Company field
+                            StateManager.setCompany({ [fieldId]: this.dataset.value });
+                        } else if (qid) {
+                            // Question answer
+                            StateManager.setAnswer(qid, {
+                                label: this.dataset.label,
+                                points: parseInt(this.dataset.points) || 0
+                            });
+                        }
                     });
                 });
             });
+
+            // For text inputs
             container.querySelectorAll('input.q-input').forEach(input => {
                 input.addEventListener('input', function() {
-                    const fieldId = this.closest('.field-group')?.querySelector('.q-label')?.textContent?.trim() || '';
-                    const field = step.fields.find(f => f.label === fieldId);
-                    if (field) { StateManager.setCompany({ [field.id]: this.value }); }
-                    UIRenderer.validateStep(step, state);
+                    // Find which field this is
+                    const labelEl = this.closest('.field-group')?.querySelector('.q-label');
+                    if (labelEl) {
+                        const fieldLabel = labelEl.textContent.trim();
+                        const stepFields = step.fields || [];
+                        const field = stepFields.find(f => f.label === fieldLabel);
+                        if (field) {
+                            StateManager.setCompany({ [field.id]: this.value });
+                        }
+                    }
                 });
             });
+
+            // Validate the step after rendering
             this.validateStep(step, state);
         },
+
         validateStep(step, state) {
             let complete = true;
-            if (step.id === 'company') { step.fields.forEach(f => { if (!state.company[f.id]) complete = false; }); }
-            else { step.questions.forEach(q => { if (!state.answers[q.id]) complete = false; }); }
-            this.elements.nextBtn.disabled = !complete;
+
+            if (step.id === 'company') {
+                const fields = step.fields || [];
+                for (const f of fields) {
+                    if (!state.company[f.id]) {
+                        complete = false;
+                        break;
+                    }
+                }
+            } else {
+                const questions = step.questions || [];
+                for (const q of questions) {
+                    if (!state.answers[q.id]) {
+                        complete = false;
+                        break;
+                    }
+                }
+            }
+
+            // Update the next button
+            if (this.elements.nextBtn) {
+                this.elements.nextBtn.disabled = !complete;
+            }
         },
+
         renderResults(scoreData, company) {
             if (!scoreData) return;
+
             const { overall, valueScore, strengths, risks, actions, tier, categoryScores } = scoreData;
+
             this.elements.gaugeScore.textContent = overall;
             this.elements.gaugeScore.style.color = tier.color;
             this.elements.gaugeTier.textContent = tier.label;
             this.elements.gaugeTier.style.color = tier.color;
+
             const circumference = 2 * Math.PI * 94;
             const arcLen = (overall / 100) * circumference;
             this.elements.gaugeArc.setAttribute('stroke', tier.color);
             this.elements.gaugeArc.setAttribute('stroke-dasharray', `${arcLen} ${circumference}`);
-            this.elements.companyNameLabel.textContent = company.industry ? `Your Results · ${company.industry}` : 'Your Results';
-            this.elements.resultsSummary.textContent = `Based on your ${company.legalForm || ''} business with ${(company.employees || '').toLowerCase()} employees, here is your scored risk profile across six compliance categories.`;
+
+            this.elements.companyNameLabel.textContent = company.industry ? `Your Results · ${company.industry}` :
+                'Your Results';
+            this.elements.resultsSummary.textContent =
+                `Based on your ${company.legalForm || ''} business with ${(company.employees || '').toLowerCase()} employees, here is your scored risk profile across six compliance categories.`;
+
             this.elements.valueScoreNum.textContent = valueScore;
             this.elements.riskCountNum.textContent = risks.length;
             this.elements.strengthCountNum.textContent = strengths.length;
+
             this.elements.categoryRows.innerHTML = '';
             COMPLIANCE_CATEGORIES.forEach(id => {
                 const c = categoryScores[id];
                 if (!c) return;
                 const t = ScoringEngine.getTier(c.healthScore);
-                this.elements.categoryRows.innerHTML += `<div class="cat-row"><div class="cat-name">${CATEGORY_NAMES[id] || id}</div><div class="cat-bar-track"><div class="cat-bar-fill" style="width:${c.healthScore}%; background:${t.color};"></div></div><div class="cat-score">${c.healthScore}</div></div>`;
+                this.elements.categoryRows.innerHTML += `
+                    <div class="cat-row">
+                        <div class="cat-name">${CATEGORY_NAMES[id] || id}</div>
+                        <div class="cat-bar-track">
+                            <div class="cat-bar-fill" style="width:${c.healthScore}%; background:${t.color};"></div>
+                        </div>
+                        <div class="cat-score">${c.healthScore}</div>
+                    </div>
+                `;
             });
-            this.elements.strengthsList.innerHTML = strengths.length ? strengths.slice(0, 6).map(s => `<li><span class="mark good">✓</span>${s}</li>`).join('') : '<li><span class="mark risk">–</span>No strong points flagged yet.</li>';
-            this.elements.risksList.innerHTML = risks.length ? risks.slice(0, 6).map(r => `<li><span class="mark risk">⚠</span>${r.text} — <strong>${r.label}</strong></li>`).join('') : '<li><span class="mark good">✓</span>No material risks flagged.</li>';
-            this.elements.actionsList.innerHTML = actions.map((a, i) => `<div class="action-item"><div class="action-priority">Priority ${i + 1}</div><div><h4>${a.title}</h4><p>${a.text}</p><span class="action-service">ATWA service: ${a.service}</span></div></div>`).join('');
+
+            this.elements.strengthsList.innerHTML = strengths.length ?
+                strengths.slice(0, 6).map(s => `<li><span class="mark good">✓</span>${s}</li>`).join('') :
+                '<li><span class="mark risk">–</span>No strong points flagged yet.</li>';
+
+            this.elements.risksList.innerHTML = risks.length ?
+                risks.slice(0, 6).map(r =>
+                    `<li><span class="mark risk">⚠</span>${r.text} — <strong>${r.label}</strong></li>`).join('') :
+                '<li><span class="mark good">✓</span>No material risks flagged.</li>';
+
+            this.elements.actionsList.innerHTML = actions.map((a, i) => `
+                <div class="action-item">
+                    <div class="action-priority">Priority ${i + 1}</div>
+                    <div>
+                        <h4>${a.title}</h4>
+                        <p>${a.text}</p>
+                        <span class="action-service">ATWA service: ${a.service}</span>
+                    </div>
+                </div>
+            `).join('');
+
             this.elements.postCapture.classList.remove('active');
             this.elements.unlockBtn.style.display = 'inline-flex';
         },
+
         showDownloadButton() {
             this.elements.postCapture.classList.add('active');
             this.elements.unlockBtn.style.display = 'none';
         },
+
         getLeadData() {
             return {
                 name: this.elements.leadName?.value?.trim() || '',
@@ -659,238 +1708,346 @@
                 consent: this.elements.leadConsent?.checked || false
             };
         },
-        init() { this.cacheElements(); }
+
+        init() {
+            this.cacheElements();
+        }
     };
 
+    // ============================================================
     // PDF GENERATOR
+    // ============================================================
     const PDFGenerator = {
-        hexToRgb(hex) { const v = hex.replace('#', ''); return [parseInt(v.substring(0,2),16), parseInt(v.substring(2,4),16), parseInt(v.substring(4,6),16)]; },
+        hexToRgb(hex) {
+            const v = hex.replace('#', '');
+            return [parseInt(v.substring(0, 2), 16), parseInt(v.substring(2, 4), 16), parseInt(v.substring(4, 6), 16)];
+        },
+
         generateReport(data, jsPDF) {
             const doc = new jsPDF({ unit: 'pt', format: 'a4' });
             const pageW = doc.internal.pageSize.getWidth();
             const margin = 48;
             let y = 60;
+
             const { company, scoreData, leadInfo } = data;
             const tier = ScoringEngine.getTier(scoreData.overall);
-            doc.setFillColor(10,10,11);
-            doc.rect(0,0,pageW,74,'F');
-            doc.setTextColor(255,255,255);
-            doc.setFont('helvetica','bold');
+
+            doc.setFillColor(10, 10, 11);
+            doc.rect(0, 0, pageW, 74, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFont('helvetica', 'bold');
             doc.setFontSize(18);
             doc.text('ATWA', margin, 34);
-            doc.setFont('helvetica','normal');
+            doc.setFont('helvetica', 'normal');
             doc.setFontSize(9);
-            doc.setTextColor(184,146,61);
+            doc.setTextColor(184, 146, 61);
             doc.text('A C C O U N T I N G   &   T A X A T I O N', margin, 48);
-            doc.setTextColor(210,210,210);
+            doc.setTextColor(210, 210, 210);
             doc.setFontSize(10);
             doc.text('Business Compliance & Risk Assessment Report', margin, 64);
+
             y = 108;
-            doc.setTextColor(38,37,31);
-            doc.setFont('helvetica','bold');
+            doc.setTextColor(38, 37, 31);
+            doc.setFont('helvetica', 'bold');
             doc.setFontSize(13);
             const clientName = leadInfo?.name || '—';
             const clientCompany = leadInfo?.company || '';
             doc.text(`Prepared for: ${clientName}${clientCompany ? ' · ' + clientCompany : ''}`, margin, y);
             y += 16;
-            doc.setFont('helvetica','normal');
+            doc.setFont('helvetica', 'normal');
             doc.setFontSize(10);
-            doc.setTextColor(92,90,82);
-            doc.text(`Date: ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`, margin, y);
+            doc.setTextColor(92, 90, 82);
+            doc.text(`Date: ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`,
+                margin, y);
             y += 30;
-            doc.setFont('helvetica','bold');
+
+            doc.setFont('helvetica', 'bold');
             doc.setFontSize(11);
-            doc.setTextColor(38,37,31);
+            doc.setTextColor(38, 37, 31);
             doc.text('Company Information', margin, y);
             y += 8;
-            doc.setDrawColor(220,216,204);
+            doc.setDrawColor(220, 216, 204);
             doc.line(margin, y, pageW - margin, y);
             y += 16;
-            doc.setFont('helvetica','normal');
+            doc.setFont('helvetica', 'normal');
             doc.setFontSize(10);
-            doc.setTextColor(92,90,82);
+            doc.setTextColor(92, 90, 82);
             [
                 `Legal form: ${company.legalForm || '—'}`,
                 `Year established: ${company.yearEstablished || '—'}`,
                 `Employees: ${company.employees || '—'}`,
                 `Annual turnover: ${company.turnover || '—'}`,
                 `Industry: ${company.industry || '—'}`
-            ].forEach(line => { doc.text(line, margin, y); y += 15; });
+            ].forEach(line => { doc.text(line, margin, y);
+                y += 15; });
             y += 12;
-            doc.setFont('helvetica','bold');
+
+            doc.setFont('helvetica', 'bold');
             doc.setFontSize(11);
-            doc.setTextColor(38,37,31);
+            doc.setTextColor(38, 37, 31);
             doc.text('Overall Business Health', margin, y);
             y += 8;
             doc.line(margin, y, pageW - margin, y);
             y += 20;
-            const [r,g,b] = this.hexToRgb(tier.color);
+            const [r, g, b] = this.hexToRgb(tier.color);
             doc.setFontSize(28);
-            doc.setTextColor(r,g,b);
+            doc.setTextColor(r, g, b);
             doc.text(`${scoreData.overall} / 100`, margin, y);
             doc.setFontSize(11);
-            doc.setTextColor(92,90,82);
+            doc.setTextColor(92, 90, 82);
             doc.text(tier.label, margin + 130, y - 2);
             y += 14;
             doc.setFontSize(10);
             doc.text(`Business Value Score: ${scoreData.valueScore} / 100`, margin, y);
             y += 30;
-            doc.setFont('helvetica','bold');
+
+            doc.setFont('helvetica', 'bold');
             doc.setFontSize(11);
-            doc.setTextColor(38,37,31);
+            doc.setTextColor(38, 37, 31);
             doc.text('Category Breakdown', margin, y);
             y += 8;
             doc.line(margin, y, pageW - margin, y);
             y += 18;
-            doc.setFont('helvetica','normal');
+            doc.setFont('helvetica', 'normal');
             doc.setFontSize(10);
             COMPLIANCE_CATEGORIES.forEach(id => {
                 const c = scoreData.categoryScores[id];
                 if (!c) return;
                 const t = ScoringEngine.getTier(c.healthScore);
-                const [cr,cg,cb] = this.hexToRgb(t.color);
-                doc.setTextColor(38,37,31);
+                const [cr, cg, cb] = this.hexToRgb(t.color);
+                doc.setTextColor(38, 37, 31);
                 doc.text(CATEGORY_NAMES[id] || id, margin, y);
-                doc.setTextColor(cr,cg,cb);
+                doc.setTextColor(cr, cg, cb);
                 doc.text(`${c.healthScore} / 100  (${t.label})`, margin + 220, y);
                 y += 16;
             });
             y += 16;
-            if (y > 650) { doc.addPage(); y = 60; }
-            doc.setFont('helvetica','bold');
+
+            if (y > 650) { doc.addPage();
+                y = 60; }
+            doc.setFont('helvetica', 'bold');
             doc.setFontSize(11);
-            doc.setTextColor(38,37,31);
+            doc.setTextColor(38, 37, 31);
             doc.text('Key Risks', margin, y);
             y += 8;
             doc.line(margin, y, pageW - margin, y);
             y += 18;
-            doc.setFont('helvetica','normal');
+            doc.setFont('helvetica', 'normal');
             doc.setFontSize(10);
-            doc.setTextColor(92,90,82);
+            doc.setTextColor(92, 90, 82);
             const riskLines = scoreData.risks.slice(0, 8);
-            if (riskLines.length === 0) { doc.text('No material risks flagged.', margin, y); y += 16; }
-            else {
+            if (riskLines.length === 0) {
+                doc.text('No material risks flagged.', margin, y);
+                y += 16;
+            } else {
                 riskLines.forEach(r => {
                     const wrapped = doc.splitTextToSize(`• ${r.text} — ${r.label}`, pageW - 2 * margin);
                     doc.text(wrapped, margin, y);
                     y += wrapped.length * 13 + 4;
-                    if (y > 750) { doc.addPage(); y = 60; }
+                    if (y > 750) { doc.addPage();
+                        y = 60; }
                 });
             }
             y += 16;
-            if (y > 600) { doc.addPage(); y = 60; }
-            doc.setFont('helvetica','bold');
+
+            if (y > 600) { doc.addPage();
+                y = 60; }
+            doc.setFont('helvetica', 'bold');
             doc.setFontSize(11);
-            doc.setTextColor(38,37,31);
+            doc.setTextColor(38, 37, 31);
             doc.text('Recommended Actions', margin, y);
             y += 8;
             doc.line(margin, y, pageW - margin, y);
             y += 18;
             scoreData.actions.forEach((a, i) => {
-                if (y > 700) { doc.addPage(); y = 60; }
-                doc.setFont('helvetica','bold');
+                if (y > 700) { doc.addPage();
+                    y = 60; }
+                doc.setFont('helvetica', 'bold');
                 doc.setFontSize(10.5);
-                doc.setTextColor(184,146,61);
+                doc.setTextColor(184, 146, 61);
                 doc.text(`Priority ${i + 1}: ${a.title}`, margin, y);
                 y += 15;
-                doc.setFont('helvetica','normal');
+                doc.setFont('helvetica', 'normal');
                 doc.setFontSize(10);
-                doc.setTextColor(92,90,82);
+                doc.setTextColor(92, 90, 82);
                 const wrapped = doc.splitTextToSize(a.text, pageW - 2 * margin);
                 doc.text(wrapped, margin, y);
                 y += wrapped.length * 13 + 4;
-                doc.setFont('helvetica','italic');
+                doc.setFont('helvetica', 'italic');
                 doc.setFontSize(9);
-                doc.setTextColor(184,146,61);
+                doc.setTextColor(184, 146, 61);
                 doc.text(`ATWA service: ${a.service}`, margin, y);
                 y += 22;
             });
-            if (y > 640) { doc.addPage(); y = 60; }
+
+            if (y > 640) { doc.addPage();
+                y = 60; }
             y += 6;
-            doc.setDrawColor(220,216,204);
+            doc.setDrawColor(220, 216, 204);
             doc.line(margin, y, pageW - margin, y);
             y += 18;
-            doc.setFont('helvetica','bold');
+            doc.setFont('helvetica', 'bold');
             doc.setFontSize(10);
-            doc.setTextColor(38,37,31);
+            doc.setTextColor(38, 37, 31);
             doc.text('Contact ATWA Accounting & Taxation LLC', margin, y);
             y += 15;
-            doc.setFont('helvetica','normal');
+            doc.setFont('helvetica', 'normal');
             doc.setFontSize(9.5);
-            doc.setTextColor(92,90,82);
+            doc.setTextColor(92, 90, 82);
             [
                 'Business Bay: Tamani Art Offices, 12th Floor, Office No. 1254, Dubai',
                 'Garhoud: Zalfa Building, 3rd Floor, Office No. 104, Dubai',
                 'Phone: +971 50 777 9293 · +971 50 777 9294',
                 'Email: info@atwa.ae   ·   Web: www.atwa.ae'
-            ].forEach(line => { doc.text(line, margin, y); y += 14; });
+            ].forEach(line => { doc.text(line, margin, y);
+                y += 14; });
+
             y += 12;
-            doc.setDrawColor(220,216,204);
+            doc.setDrawColor(220, 216, 204);
             doc.line(margin, y, pageW - margin, y);
             y += 16;
-            doc.setFont('helvetica','italic');
+            doc.setFont('helvetica', 'italic');
             doc.setFontSize(8.5);
-            doc.setTextColor(140,140,140);
-            const disclaimer = doc.splitTextToSize('This assessment is provided by ATWA Accounting & Taxation LLC for general informational purposes only and does not constitute legal, tax, or accounting advice. Scores are indicative, based solely on self-reported answers, and should not be relied upon for compliance decisions. Please consult a qualified advisor before acting on any recommendation shown here.', pageW - 2 * margin);
+            doc.setTextColor(140, 140, 140);
+            const disclaimer = doc.splitTextToSize(
+                'This assessment is provided by ATWA Accounting & Taxation LLC for general informational purposes only and does not constitute legal, tax, or accounting advice. Scores are indicative, based solely on self-reported answers, and should not be relied upon for compliance decisions. Please consult a qualified advisor before acting on any recommendation shown here.',
+                pageW - 2 * margin
+            );
             doc.text(disclaimer, margin, y);
+
             return doc;
         },
+
         downloadPDF(data, jsPDF, filename) {
             const doc = this.generateReport(data, jsPDF);
-            const defaultFilename = `ATWA-Compliance-Assessment-${data.company?.name || 'report'}.pdf`;
+            const defaultFilename =
+                `ATWA-Compliance-Assessment-${data.company?.name || 'report'}.pdf`;
             doc.save(filename || defaultFilename);
         }
     };
 
-    // MAIN CONTROLLER
+    // ============================================================
+    // MAIN APP
+    // ============================================================
     const App = {
         totalSteps: 0,
+        currentStepIndex: 0,
+
         init() {
             const steps = AssessmentData.getAllSteps();
             this.totalSteps = steps.length;
+
             UIRenderer.init();
+
             const elements = UIRenderer.elements;
-            if (elements.startBtn) elements.startBtn.addEventListener('click', this.startWizard.bind(this));
-            if (elements.backBtn) elements.backBtn.addEventListener('click', this.goBack.bind(this));
-            if (elements.nextBtn) elements.nextBtn.addEventListener('click', this.goForward.bind(this));
-            if (elements.restartBtn) elements.restartBtn.addEventListener('click', this.restart.bind(this));
-            if (elements.unlockBtn) elements.unlockBtn.addEventListener('click', this.unlockReport.bind(this));
-            if (elements.downloadBtn) elements.downloadBtn.addEventListener('click', this.downloadPDF.bind(this));
-            if (elements.bookBtn) elements.bookBtn.addEventListener('click', function() { window.open('https://YOUR_BOOKING_LINK_HERE', '_blank'); });
+
+            // --- Event Listeners ---
+            if (elements.startBtn) {
+                elements.startBtn.addEventListener('click', this.startWizard.bind(this));
+            }
+
+            if (elements.backBtn) {
+                elements.backBtn.addEventListener('click', this.goBack.bind(this));
+            }
+
+            if (elements.nextBtn) {
+                elements.nextBtn.addEventListener('click', this.goForward.bind(this));
+            }
+
+            if (elements.restartBtn) {
+                elements.restartBtn.addEventListener('click', this.restart.bind(this));
+            }
+
+            if (elements.unlockBtn) {
+                elements.unlockBtn.addEventListener('click', this.unlockReport.bind(this));
+            }
+
+            if (elements.downloadBtn) {
+                elements.downloadBtn.addEventListener('click', this.downloadPDF.bind(this));
+            }
+
+            if (elements.bookBtn) {
+                elements.bookBtn.addEventListener('click', function() {
+                    // 🔥 REPLACE WITH YOUR BOOKING LINK
+                    window.open('https://YOUR_BOOKING_LINK_HERE', '_blank');
+                });
+            }
+
+            // --- Check for saved state ---
             const hasSaved = StateManager.load();
+
             if (hasSaved && StateManager.isComplete()) {
                 const scoreData = StateManager.getScoreData();
-                if (scoreData) { UIRenderer.renderResults(scoreData, StateManager.getCompany()); UIRenderer.showScreen(SCREENS.RESULTS); return; }
+                if (scoreData) {
+                    UIRenderer.renderResults(scoreData, StateManager.getCompany());
+                    UIRenderer.showScreen(SCREENS.RESULTS);
+                    return;
+                }
             }
+
             if (hasSaved) {
                 const stepIndex = StateManager.getCurrentStep();
-                if (stepIndex > 0 && stepIndex < this.totalSteps) { this.renderStep(stepIndex); UIRenderer.showScreen(SCREENS.WIZARD); return; }
+                if (stepIndex > 0 && stepIndex < this.totalSteps) {
+                    this.currentStepIndex = stepIndex;
+                    this.renderStep(stepIndex);
+                    UIRenderer.showScreen(SCREENS.WIZARD);
+                    return;
+                }
             }
+
             UIRenderer.showScreen(SCREENS.LANDING);
         },
-        startWizard() { StateManager.reset(); this.renderStep(0); UIRenderer.showScreen(SCREENS.WIZARD); },
+
+        startWizard() {
+            StateManager.reset();
+            this.currentStepIndex = 0;
+            this.renderStep(0);
+            UIRenderer.showScreen(SCREENS.WIZARD);
+        },
+
         renderStep(stepIndex) {
             const steps = AssessmentData.getAllSteps();
             const step = steps[stepIndex];
-            const state = { answers: StateManager.getAnswers(), company: StateManager.getCompany() };
+            const state = {
+                answers: StateManager.getAnswers(),
+                company: StateManager.getCompany()
+            };
             UIRenderer.renderStep(step, state, stepIndex, this.totalSteps);
         },
+
+        validateStep() {
+            const steps = AssessmentData.getAllSteps();
+            const step = steps[this.currentStepIndex];
+            const state = {
+                answers: StateManager.getAnswers(),
+                company: StateManager.getCompany()
+            };
+            UIRenderer.validateStep(step, state);
+        },
+
         goForward() {
             const currentStep = StateManager.getCurrentStep();
+
             if (currentStep < this.totalSteps - 1) {
                 const nextStep = currentStep + 1;
                 StateManager.setCurrentStep(nextStep);
+                this.currentStepIndex = nextStep;
                 this.renderStep(nextStep);
-            } else { this.completeAssessment(); }
+            } else {
+                this.completeAssessment();
+            }
         },
+
         goBack() {
             const currentStep = StateManager.getCurrentStep();
             if (currentStep > 0) {
                 const prevStep = currentStep - 1;
                 StateManager.setCurrentStep(prevStep);
+                this.currentStepIndex = prevStep;
                 this.renderStep(prevStep);
             }
         },
+
         completeAssessment() {
             const answers = StateManager.getAnswers();
             const company = StateManager.getCompany();
@@ -899,31 +2056,56 @@
             UIRenderer.renderResults(scoreData, company);
             UIRenderer.showScreen(SCREENS.RESULTS);
         },
+
         restart() {
             StateManager.reset();
             UIRenderer.showScreen(SCREENS.LANDING);
             UIRenderer.elements.postCapture?.classList.remove('active');
-            if (UIRenderer.elements.unlockBtn) UIRenderer.elements.unlockBtn.style.display = 'inline-flex';
+            if (UIRenderer.elements.unlockBtn) {
+                UIRenderer.elements.unlockBtn.style.display = 'inline-flex';
+            }
         },
+
         unlockReport() {
             const leadData = UIRenderer.getLeadData();
-            if (!leadData.name) { alert('Please enter your full name.'); return; }
-            if (!leadData.email) { alert('Please enter your email address.'); return; }
-            if (!leadData.phone) { alert('Please enter your phone number.'); return; }
-            if (!leadData.consent) { alert('Please consent to our privacy policy to receive your report.'); return; }
+
+            if (!leadData.name) { alert('Please enter your full name.');
+                return; }
+            if (!leadData.email) { alert('Please enter your email address.');
+                return; }
+            if (!leadData.phone) { alert('Please enter your phone number.');
+                return; }
+            if (!leadData.consent) {
+                alert('Please consent to our privacy policy to receive your report.');
+                return;
+            }
+
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(leadData.email)) { alert('Please enter a valid email address.'); return; }
+            if (!emailRegex.test(leadData.email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
             StateManager.unlock();
             UIRenderer.showDownloadButton();
             alert('✅ Report unlocked! Click "Download PDF report" to get your assessment.');
         },
+
         downloadPDF() {
             const scoreData = StateManager.getScoreData();
             const company = StateManager.getCompany();
             const leadData = UIRenderer.getLeadData();
-            if (!scoreData) { alert('No assessment data available.'); return; }
+
+            if (!scoreData) {
+                alert('No assessment data available.');
+                return;
+            }
+
             try {
-                PDFGenerator.downloadPDF({ company, scoreData, leadInfo: leadData }, window.jspdf.jsPDF, `ATWA-Compliance-Assessment-${leadData.company || leadData.name || 'report'}.pdf`);
+                PDFGenerator.downloadPDF({ company, scoreData, leadInfo: leadData },
+                    window.jspdf.jsPDF,
+                    `ATWA-Compliance-Assessment-${leadData.company || leadData.name || 'report'}.pdf`
+                );
             } catch (error) {
                 console.error('PDF generation failed:', error);
                 alert('Unable to generate PDF. Please try again.');
@@ -931,12 +2113,18 @@
         }
     };
 
-    // START
+    // ============================================================
+    // START THE APP
+    // ============================================================
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('ATWA Compliance Assessment v1.1.0 - Single File Version');
+        console.log('✅ ATWA Compliance Assessment - Starting...');
         App.init();
+
+        // Keyboard shortcuts
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && e.target.tagName === 'BUTTON') e.target.click();
+            if (e.key === 'Enter' && e.target.tagName === 'BUTTON') {
+                e.target.click();
+            }
             if (e.key === 'ArrowRight' && !document.getElementById(SCREENS.LANDING).classList.contains('active')) {
                 const nextBtn = UIRenderer.elements.nextBtn;
                 if (nextBtn && !nextBtn.disabled) nextBtn.click();
@@ -946,9 +2134,12 @@
                 if (backBtn && backBtn.style.visibility !== 'hidden') backBtn.click();
             }
         });
-        console.log('✅ Application loaded successfully');
+
+        console.log('✅ Application ready!');
     });
+
 })();
 </script>
 </body>
 </html>
+  
